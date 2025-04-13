@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修改用户名 - Translate R1</title>
+    <link rel="stylesheet" href="../assets/font-awesome-css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/chang_username.css">
+</head>
+<body>
+<button class="back-btn" onclick="goBackToPersonCenter()">
+    <i class="fas fa-arrow-left"></i> 返回个人中心
+</button>
+
+<div class="theme-switch" onclick="toggleTheme()">
+    <i class="fas fa-sun"></i>
+</div>
+
+<div class="container">
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-language"></i>
+            <h1>Translate R1</h1>
+        </div>
+    </header>
+    <main class="translator-box">
+        <h2 class="text-center">修改用户名</h2>
+        <form id="change-username-form" onsubmit="handleChangeUsername(event)">
+            <div class="input-group">
+                <input type="text" id="new-username" name="new-username" placeholder="请输入新用户名" required>
+            </div>
+            <button class="action-btn" type="submit">
+                <i class="fas fa-user-edit"></i> 修改用户名
+            </button>
+        </form>
+    </main>
+</div>
+
+<script src="../assets/js/change_username.js"></script>
+</body>
+</html>

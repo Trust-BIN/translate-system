@@ -1,0 +1,225 @@
+/* 主题变量 */
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3f37c9;
+    --accent-color: #4895ef;
+    --danger-color: #dc3545;
+    --danger-hover: #c82333;
+    --light-color: #f4f4f9;
+    --dark-color: #212529;
+    --card-bg: white;
+    --text-color: #333;
+    --border-color: #ddd;
+    --hover-bg: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --header-bg: #007BFF;
+    --header-text: white;
+    --search-bg: white;
+    --search-border: #ccc;
+    --search-focus: #007BFF;
+    --even-row: #f2f2f2;
+}
+
+[data-theme="dark"] {
+    --primary-color: #4895ef;
+    --secondary-color: #4361ee;
+    --accent-color: #3f37c9;
+    --danger-color: #e63946;
+    --danger-hover: #d90429;
+    --light-color: #1a1a2e;
+    --dark-color: #f8f9fa;
+    --card-bg: #0f3460;
+    --text-color: #e2e8f0;
+    --border-color: #2d3748;
+    --hover-bg: #16213e;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --header-bg: #0f3460;
+    --header-text: #e2e8f0;
+    --search-bg: #16213e;
+    --search-border: #2d3748;
+    --search-focus: #4895ef;
+    --even-row: rgba(72, 149, 239, 0.1);
+}
+
+/* 基础样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    background-color: var(--light-color);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+/* 容器样式 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-top: 4rem;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    text-shadow: 2px 2px 4px var(--shadow-color);
+}
+
+/* 搜索框 */
+#searchInput {
+    display: block;
+    width: 30%;
+    margin: 20px auto;
+    padding: 12px 20px;
+    border: 1px solid var(--search-border);
+    border-radius: 25px;
+    background-color: var(--search-bg);
+    color: var(--text-color);
+    box-shadow: 0 0 10px var(--shadow-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: var(--search-focus);
+    box-shadow: 0 0 15px rgba(67, 97, 238, 0.3);
+}
+
+/* 表格样式 */
+#history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 0 20px var(--shadow-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#history-table th,
+#history-table td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#history-table th {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+#history-table tr:nth-child(even) {
+    background-color: var(--even-row);
+}
+
+#history-table tr {
+    background-color: var(--card-bg);
+}
+
+#history-table tr:hover {
+    background-color: var(--hover-bg);
+}
+
+/* 按钮样式 */
+#history-table td button {
+    padding: 8px 15px;
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#history-table td button:hover {
+    background-color: var(--danger-hover);
+    transform: scale(1.05);
+}
+
+/* 返回按钮 */
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--shadow-color);
+    transition: all 0.3s ease;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+/* 主题切换按钮 */
+.theme-switch {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--shadow-color);
+    z-index: 100;
+    transition: var(--transition);
+}
+
+.theme-switch:hover {
+    transform: rotate(30deg);
+}
+
+.theme-switch i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        padding-top: 5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    #searchInput {
+        width: 90%;
+    }
+
+    #history-table th,
+    #history-table td {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .back-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}

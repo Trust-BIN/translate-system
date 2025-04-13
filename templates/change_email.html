@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>修改邮箱 - Translate R1</title>
+  <link rel="stylesheet" href="../assets/font-awesome-css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/change_email.css">
+</head>
+<body>
+<button class="back-btn" onclick="goBackToPersonCenter()">
+  <i class="fas fa-arrow-left"></i> 返回
+</button>
+
+<div class="theme-switch" onclick="toggleTheme()">
+  <i class="fas fa-sun"></i>
+</div>
+
+<div class="container">
+  <header class="header">
+    <div class="logo">
+      <i class="fas fa-language"></i>
+      <h1>Translate R1</h1>
+    </div>
+  </header>
+  <main class="translator-box">
+    <h2 class="text-center">修改邮箱</h2>
+    <form id="change-email-form" onsubmit="handleChangeEmail(event)">
+      <div class="input-group">
+        <input type="email" id="new-email" name="new-email" placeholder="请输入新邮箱地址" required>
+      </div>
+      <button class="action-btn" type="submit">
+        <i class="fas fa-envelope"></i> 修改邮箱
+      </button>
+    </form>
+  </main>
+</div>
+
+<script src="../assets/js/change_email.js"></script>
+</body>
+</html>

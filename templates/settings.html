@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置 - Translate R1</title>
+    <link rel="stylesheet" href="../assets/font-awesome-css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/settings.css">
+</head>
+<body>
+<button class="back-btn" onclick="goBackToTranslate()">
+    <i class="fas fa-arrow-left"></i> 返回
+</button>
+
+<div class="theme-switch" onclick="toggleTheme()">
+    <i class="fas fa-sun"></i>
+</div>
+
+<div class="container">
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-language"></i>
+            <h1>Translate R1</h1>
+        </div>
+    </header>
+    <main class="translator-box">
+        <h2 class="text-center">设置</h2>
+
+        <h3>修改密码</h3>
+        <button class="translate-btn" onclick="goToChangePasswordPage()">
+            <i class="fas fa-key"></i> 修改密码
+        </button>
+
+        <h3>账号管理</h3>
+        <button class="translate-btn danger" onclick="handleDeleteAccount()">
+            <i class="fas fa-exclamation-triangle"></i> 注销账号
+        </button>
+    </main>
+</div>
+
+<script src="../assets/js/settings.js"></script>
+</body>
+</html>

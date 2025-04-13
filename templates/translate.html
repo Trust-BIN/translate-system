@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek - 智能翻译系统</title>
+    <link rel="stylesheet" href="../assets/font-awesome-css/all.min.css">
+    <link rel="stylesheet" href="../assets/iconfont/iconfont.css">
+    <link rel="stylesheet" href="../assets/css/translate.css">
+</head>
+<body>
+<div class="page-container">
+    <!-- 侧边工具栏 -->
+    <div class="left_nav">
+        <!-- 头像-->
+        <div class="iocn">
+            <div class="iocn_img"> <span class="iconfont icon-yonghuzhongxin"></span> </div>
+            <div class="iocn_con">
+                <p>你好！</p>
+                <h2 id="username-display">Username</h2>
+            </div>
+        </div>
+        <div class="line"></div>
+        <!-- 工具栏 -->
+        <div class="menu">
+            <div class="item">
+                <div class="light"></div>
+                <div class="liocn">
+                    <a href="/person_center">
+                        <span class="iconfont icon-yonghuzhongxin"></span>
+                    </a>
+                </div>
+                <div class="con">
+                    <a href="/person_center">
+                        <button>个人中心</button>
+                    </a>
+                </div>
+                <div class="ricon"></div>
+            </div>
+            <div class="item">
+                <div class="light"></div>
+                <div class="liocn">
+                    <a href="/history">
+                        <span class="iconfont icon-lishijilu1"></span>
+                    </a>
+                </div>
+                <div class="con">
+                    <a href="/history">
+                        <button id="history-btn" onclick="fetchHistory()">历史记录</button>
+                    </a>
+                </div>
+                <div class="ricon"></div>
+            </div>
+            <div class="item">
+                <div class="light"></div>
+                <div class="liocn">
+                    <a href="/settings">
+                        <span class="iconfont icon-shezhi"></span>
+                    </a>
+                </div>
+                <div class="con">
+                    <a href="/settings">
+                        <button>设置</button>
+                    </a>
+                </div>
+                <div class="ricon"></div>
+            </div>
+            <div class="item">
+                <div class="light"></div>
+                <div class="liocn">
+                    <a href="/logout">
+                        <span class="iconfont icon-tuichu1"></span>
+                    </a>
+                </div>
+                <div class="con">
+                    <button onclick="logout()">退出登录</button>
+                </div>
+                <div class="ricon"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 主内容区-->
+    <div class="container">
+        <!-- 头部设计 -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-language"></i>
+                <h1>Translate R1</h1>
+            </div>
+            <div class="theme-switch" onclick="toggleTheme()">
+                <i class="fas fa-sun light-icon"></i>
+                <i class="fas fa-moon dark-icon"></i>
+            </div>
+        </header>
+
+        <!-- 主体内容 -->
+        <main class="translator-box">
+            <!-- 输入区域 -->
+            <div class="input-section">
+                <div class="text-header">
+                    <h3>输入文本</h3>
+                    <span class="char-count" id="inputCount">0/1000</span>
+                </div>
+                <div class="text-box">
+                    <textarea id="sourceText" placeholder="在这里输入需要翻译的内容..." maxlength="1000" oninput="detectLanguage(); updateCharCount()"></textarea>
+                    <div class="text-actions">
+                        <button class="icon-btn" onclick="clearText()">
+                            <i class="fas fa-eraser"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 控制栏 -->
+            <div class="control-bar">
+                <div class="input-group">
+                    <div class="lang-selector" id="sourceLang-selector">
+                        <input list="sourceLanguages" id="sourceLang" placeholder="选择或输入源语言" value="自动检测">
+                        <datalist id="sourceLanguages">
+                            <option value="自动检测">自动检测</option>
+                            <option value="英语">英语</option>
+                            <option value="日语">日语</option>
+                            <option value="韩语">韩语</option>
+                            <option value="法语">法语</option>
+                            <option value="汉语">汉语</option>
+                            <option value="印尼语">印尼语</option>
+                            <option value="俄语">俄语</option>
+                            <option value="阿拉伯语">阿拉伯语</option>
+                            <option value="孟加拉语">孟加拉语</option>
+                        </datalist>
+                    </div>
+                    <button class="swap-btn" onclick="swapLanguages()">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+                    <div class="lang-selector" id="targetLang-selector">
+                        <input list="targetLanguages" id="targetLang" placeholder="选择或输入目标语言" value="英语" required>
+                        <datalist id="targetLanguages">
+                            <option value="英语">英语</option>
+                            <option value="日语">日语</option>
+                            <option value="韩语">韩语</option>
+                            <option value="法语">法语</option>
+                            <option value="汉语">汉语</option>
+                            <option value="印尼语">印尼语</option>
+                            <option value="俄语">俄语</option>
+                            <option value="阿拉伯语">阿拉伯语</option>
+                            <option value="孟加拉语">孟加拉语</option>
+                        </datalist>
+                    </div>
+                </div>
+                <button class="translate-btn" onclick="handleTranslation()">
+                    <i class="fas fa-language"></i>
+                    翻译
+                </button>
+            </div>
+
+            <!-- 输出区域 -->
+            <div class="output-section">
+                <div class="text-header">
+                    <h3>翻译结果</h3>
+                </div>
+                <div class="result-box">
+                    <div id="result"></div>
+                    <div class="loading-overlay" id="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                    <div class="text-actions">
+                        <button class="copy-result-btn" onclick="copyResult()">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="../assets/js/translate.js"></script>
+</body>
+</html>

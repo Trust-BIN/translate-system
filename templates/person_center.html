@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户中心 - Translate R1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/person_center.css">
+
+</head>
+<body>
+<button class="back-btn" onclick="goBackToTranslate()">
+    <i class="fas fa-arrow-left"></i> 返回翻译
+</button>
+
+<div class="theme-switch" onclick="toggleTheme()">
+    <i class="fas fa-sun"></i>
+</div>
+
+<div class="container">
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-language"></i>
+            <h1>Translate R1</h1>
+        </div>
+    </header>
+    <main class="translator-box">
+        <h2 class="text-center">个人中心</h2>
+        <div id="user-info">
+            <p><strong>用户名:</strong> <span id="username">User123</span></p>
+            <p><strong>邮箱:</strong> <span id="user-email">user@example.com</span></p>
+        </div>
+        <button class="translate-btn" onclick="goToChangeUsernamePage()">
+            <i class="fas fa-user-edit"></i> 修改用户名
+        </button>
+        <button class="translate-btn" onclick="goToChangeEmailPage()">
+            <i class="fas fa-envelope"></i> 修改邮箱
+        </button>
+    </main>
+</div>
+
+<script src="../assets/js/person_center.js"></script>
+</body>
+</html>

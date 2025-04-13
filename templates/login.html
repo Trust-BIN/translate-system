@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - Translate R1</title>
+    <link rel="stylesheet" href="../assets/font-awesome-css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/login.css">
+</head>
+<body>
+<div class="container">
+    <div class="theme-switch" onclick="toggleTheme()">
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-language"></i>
+            <h1>Translate R1</h1>
+        </div>
+    </header>
+    <main class="translator-box">
+        <h2 class="text-center">登录</h2>
+        <form id="login-form" action="/login" method="post" onsubmit="handleLogin(event)">
+            <div class="text-box">
+                <input type="text" id="username" name="username" placeholder="用户名" required>
+            </div>
+            <div class="text-box">
+                <input type="password" id="password" name="password" placeholder="密码" required>
+                <i onclick="togglePasswordVisibility('password', this)"></i>
+            </div>
+            <button class="translate-btn" type="submit">
+                <i class="fas fa-sign-in-alt"></i>
+                登录
+            </button>
+        </form>
+        <p class="text-center">还没有账号？ <a href="/register">立即注册</a></p>
+    </main>
+</div>
+
+<script src="../assets/js/login.js"></script>
+</body>
+</html>

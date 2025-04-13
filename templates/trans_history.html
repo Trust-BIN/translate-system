@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史翻译记录 - Translate R1</title>
+    <link rel="stylesheet" href="../assets/font-awesome-css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/history.css">
+</head>
+<body>
+<button class="back-btn" onclick="goBackToTranslate()">
+    <i class="fas fa-arrow-left"></i> 返回
+</button>
+
+<div class="theme-switch" onclick="toggleTheme()">
+    <i class="fas fa-sun"></i>
+</div>
+
+<div class="container">
+    <h1>历史翻译记录</h1>
+    <input type="text" id="searchInput" placeholder="搜索..." onkeyup="searchTable()">
+    <table id="history-table">
+        <thead>
+        <tr>
+            <th>原文</th>
+            <th>译文</th>
+            <th>翻译时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script src="../assets/js/history.js"></script>
+</body>
+</html>

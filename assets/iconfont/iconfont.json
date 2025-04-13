@@ -1,0 +1,37 @@
+{
+  "id": "4870477",
+  "name": "translate_system",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "12870794",
+      "name": "用户中心",
+      "font_class": "yonghuzhongxin",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "17676002",
+      "name": "基本设置",
+      "font_class": "shezhi",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "8312105",
+      "name": "退出",
+      "font_class": "tuichu1",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "21233148",
+      "name": "历史记录",
+      "font_class": "lishijilu1",
+      "unicode": "f4b9",
+      "unicode_decimal": 62649
+    }
+  ]
+}

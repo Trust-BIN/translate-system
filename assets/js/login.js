@@ -1,40 +1,44 @@
 // 登录处理函数
 async function handleLogin(event) {
     event.preventDefault(); // 阻止表单默认提交行为
-    const username = document.getElementById('username').value;
+    const useraccount = document.getElementById('useraccount').value;
     const password = document.getElementById('password').value;
 
-    console.log('用户名:', username);
+    console.log('账号:', useraccount);
     console.log('密码:', password);
 
     // 确保用户名和密码不为空
-    if (!username || !password) {
+    if (!useraccount || !password) {
         alert('请输入用户名和密码');
         return;
     }
 
     const formData = new URLSearchParams();
-    formData.append('username', username);
+    formData.append('useraccount', useraccount);
     formData.append('password', password);
     console.log("测试")
-    console.log(formData.get('username'));
+    console.log(formData.get('useraccount'));
 
     try {
         const response = await fetch('/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Content-Type-Options':'nosniff',
+                'X-Frame-Options':'DENY',
             },
             body: formData
         });
 
-        if (response.ok) {
-            if (response.redirected) {
-                window.location.href = response.url; // 登录成功，重定向到首页
-            }
+        // 4. 解析响应数据
+        const data = await response.json();
+
+        // 5. 处理响应
+        if (data.success) {
+            window.location.href = data.redirected; // 跳转到指定页面
         } else {
-            const data = await response.json();
-            alert(data.error); // 显示错误信息
+            // 登录失败显示错误信息
+            alert('error:'+ (data.message || '登录失败'));
         }
     } catch (error) {
         alert('请求出错，请稍后再试');
@@ -82,5 +86,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
 
     // 自动聚焦用户名输入框
-    document.getElementById('username').focus();
+    document.getElementById('useraccount').focus();
 });

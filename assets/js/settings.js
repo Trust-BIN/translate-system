@@ -32,7 +32,9 @@ async function handleDeleteAccount() {
                 }
             });
 
-            if (response.ok) {
+            const data = await response.json()
+
+            if (data.success) {
                 alert('账号已成功注销');
                 window.location.href = '/login';
             } else {

@@ -1,95 +1,65 @@
 package hanlders
 
 import (
-	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"time"
 	"translate-system/interal/database"
 	"translate-system/serve"
+
+	"github.com/gin-gonic/gin"
 )
 
-/*登录页面*/
-func LoginHandle(w http.ResponseWriter, r *http.Request) {
-
-	if r.Method == http.MethodGet {
-		// 处理 GET 请求，返回登录页面
-		http.ServeFile(w, r, "./templates/login.html")
+// 登录处理
+func LoginHandle(c *gin.Context) {
+	if c.Request.Method == http.MethodGet {
+		c.HTML(http.StatusOK, "login.html", nil)
+		return
+	} else if c.Request.Method != http.MethodPost {
+		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持POST请求"})
 		return
 	}
 
-	if r.Method != http.MethodPost {
-		//http.Error(w, "只支持POST请求", http.StatusMethodNotAllowed)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "只支持POST请求"})
-		return
-	}
+	// 使用 Gin 的表单绑定
+	account := c.PostForm("useraccount")
+	password := c.PostForm("password")
+	fmt.Println("account:", account)
+	fmt.Println("password:", password)
 
-	err := r.ParseForm()
-	log.Printf("loginHand")
-	if err != nil {
-		log.Printf("解析表单数据失败: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "解析表单数据失败"})
-		return
-	}
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-
-	log.Printf("接收到的用户名: %s", username)
-	log.Printf("接收到的密码: %s", password)
-
-	//// 连接数据库
-	//db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", serve.DbUser, serve.DbPassword, serve.DbHost, serve.DbPort, serve.DbName))
-	//if err != nil {
-	//	log.Printf("无法打开数据库连接: %v", err)
-	//	//http.Error(w, "服务器内部错误，请稍后再试", http.StatusInternalServerError)
-	//	w.Header().Set("Content-Type", "application/json")
-	//	json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
-	//	return
-	//}
-	//defer db.Close()
+	log.Printf("登录尝试 - 账号: %s", account) // 注意：实际生产中不应记录密码
 
 	db := database.GetDB()
-	// 测试数据库连接
-	//err = db.Ping()
-	//if err != nil {
-	//	log.Printf("无法连接到数据库: %v", err)
-	//	//http.Error(w, "数据库连接失败，请稍后再试", http.StatusInternalServerError)
-	//	w.Header().Set("Content-Type", "application/json")
-	//	json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "数据库连接失败，请稍后再试"})
-	//	return
-	//}
 
-	// 检查用户名和密码是否匹配
-	var count int
-	err = db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ? AND password = ?", username, password).Scan(&count)
+	// 1. 先查询账号是否存在
+	var storedPassword string
+	err := db.QueryRow("SELECT password FROM users WHERE useraccount = ?", account).Scan(&storedPassword)
 	if err != nil {
-		log.Printf("查询用户信息时出错: %v", err)
-		//http.Error(w, "服务器内部错误，请稍后再试", http.StatusInternalServerError)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
+		log.Printf("用户查询失败: %v", err)
+		// 使用相同错误消息防止用户枚举攻击
+		c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "用户名或密码错误"})
 		return
 	}
 
-	if count == 0 {
-		//http.Error(w, "用户名或密码错误，请重试", http.StatusUnauthorized)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "用户名或密码错误，请重试"})
+	// 2. 验证密码 (实际应用中应该使用bcrypt等哈希比较)
+	if password != storedPassword {
+		log.Printf("密码验证失败 - 用户名: %s", account)
+		c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "用户名或密码错误"})
 		return
 	}
 
-	// 登录成功，设置会话 Cookie 并重定向到首页
-	cookie := http.Cookie{
-		Name:  "username",
-		Value: username,
-		Path:  "/",
-	}
-	http.SetCookie(w, &cookie)
+	// 3. 登录成功，设置安全Cookie
+	c.SetCookie("useraccount", account, int(24*time.Hour.Seconds()), "/", "", false, true)
 
-	// 登录成功，重定向到首页
-	http.Redirect(w, r, "/", http.StatusFound)
+	// 设置额外的安全头
+	c.Header("X-Content-Type-Options", "nosniff")
+	c.Header("X-Frame-Options", "DENY")
+
+	// 返回JSON响应而不是重定向，方便前端处理
+	c.JSON(http.StatusOK, gin.H{
+		"success":    true,
+		"message":    err,
+		"redirected": "/", // 前端可以根据这个重定向
+	})
+
 }

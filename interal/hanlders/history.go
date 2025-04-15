@@ -1,8 +1,11 @@
 package hanlders
 
-import "net/http"
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
 
 // 翻译记录页面
-func HistoryHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./templates/trans_history.html")
+func HistoryHandler(c *gin.Context) {
+	c.HTML(http.StatusOK, "trans_history.html", nil)
 }

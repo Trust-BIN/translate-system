@@ -12,6 +12,7 @@ window.onload = async function () {
             const data = await response.json();
             document.getElementById('username').textContent = data.username;
             document.getElementById('user-email').textContent = data.email;
+            document.getElementById('useraccount').textContent = data.useraccount;
         } else {
             const errorData = await response.json();
             alert(errorData.error);

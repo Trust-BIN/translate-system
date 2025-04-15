@@ -48,13 +48,13 @@ async function handleChangePassword(event) {
     }
 
     // 验证密码强度（可选）
-    if (newPassword.length < 8) {
-        alert('密码长度至少为8位');
+    if (newPassword.length < 6) {
+        alert('密码长度至少为6位');
         return;
     }
 
     try {
-        const response = await fetch('/change_password', {
+        const response = await fetch('/change_my_password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ async function handleChangePassword(event) {
             const data = await response.json();
             if (data.success) {
                 alert('密码修改成功');
-                goBackToSettings();
+                goBackToLogin();
             } else {
                 alert('修改失败: ' + (data.message || '未知错误'));
             }
@@ -86,6 +86,10 @@ async function handleChangePassword(event) {
 // 返回设置页面
 function goBackToSettings() {
     window.location.href = '/settings';
+}
+
+function goBackToLogin() {
+    window.location.href = '/login';
 }
 
 // 页面加载时初始化

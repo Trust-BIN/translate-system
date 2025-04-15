@@ -152,7 +152,7 @@ async function deleteHistoryRecord(originalText, translationTime) {
         };
 
         const response = await fetch('/delete_history_record', {
-            method: 'POST',
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             },

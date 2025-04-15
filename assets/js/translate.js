@@ -135,7 +135,7 @@ async function translateText(text) {
             throw new Error(`HTTP 错误 ${response.status}`);
         }
 
-        const data = await response.json();
+        const data = await response.json();1
         if (data.choices && data.choices.length > 0) {
             return data.choices[0].message.content;
         }
@@ -233,7 +233,7 @@ elements.sourceText.addEventListener('input', detectLanguage);
 async function logout() {
     try {
         const response = await fetch('/logout', {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -243,28 +243,28 @@ async function logout() {
             throw new Error(`HTTP 错误 ${response.status}`);
         }
 
-        // 手动重定向到登录页面
-        window.location.href = '/login';
+        const data = await response.json();
+
+        if (data.success) {
+            window.location.href = data.redirected;
+        }
     } catch (error) {
         console.error('退出登录出错:', error);
         alert('退出登录出错，请稍后再试');
     }
 }
 
-// 获取 Cookie 中的用户名
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
-
 // 将用户名显示在页面上
 document.addEventListener('DOMContentLoaded', function () {
-    const username = getCookie('username');
-    if (username) {
-        const usernameDisplay = document.getElementById('username-display');
-        usernameDisplay.textContent = username;
-    }
+    fetch("/api/current-user")
+        .then(response => response.json())
+        .then(data => {
+            if (data.username) {
+                console.log("当前用户:", data.username);
+                document.getElementById("username-display").textContent = data.username;
+            }
+        })
+        .catch(err => console.error("获取用户信息失败:", err));
 });
 
 // 主题切换功能
@@ -303,13 +303,6 @@ function initTheme() {
 
 // 页面加载时初始化主题
 window.addEventListener('DOMContentLoaded', initTheme);
-/*-------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------*/
+
 
 

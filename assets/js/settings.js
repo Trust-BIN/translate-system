@@ -21,33 +21,12 @@ function initTheme() {
     themeIcon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
 }
 
-// 处理注销账号
-async function handleDeleteAccount() {
-    if (confirm('确定要注销账号吗？此操作将永久删除您的所有数据且不可恢复！')) {
-        try {
-            const response = await fetch('/delete_account', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                alert('账号已成功注销');
-                window.location.href = '/login';
-            } else {
-                const errorData = await response.json();
-                alert('注销失败: ' + (errorData.error || '未知错误'));
-            }
-        } catch (error) {
-            alert('请求出错，请稍后再试');
-            console.error(error);
-        }
-    }
-}
-
 function goToChangePasswordPage() {
     window.location.href = '/change_password';
+}
+
+function goToDeleteAccountPage(){
+    window.location.href = '/delete_account'
 }
 
 // 返回翻译主界面的函数

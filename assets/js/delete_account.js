@@ -33,49 +33,30 @@ function togglePasswordVisibility(inputId, icon) {
     }
 }
 
-// 处理修改密码
-async function handleChangePassword(event) {
+// 处理注销账号
+async function handleDeleteAccount(event) {
     event.preventDefault();
 
-    const oldPassword = document.getElementById('old-password').value;
-    const newPassword = document.getElementById('new-password').value;
-    const confirmPassword = document.getElementById('confirm-new-password').value;
-
-    // 验证新密码和确认密码是否一致
-    if (newPassword !== confirmPassword) {
-        alert('新密码和确认密码不一致');
-        return;
-    }
-
-    // 验证密码强度（可选）
-    if (newPassword.length < 6) {
-        alert('密码长度至少为6位');
-        return;
-    }
+    const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('/change_my_password', {
+        const response = await fetch('/delete_my_account', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                old_password: oldPassword,
-                new_password: newPassword
+                password: password
             })
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            if (data.success) {
-                alert('密码修改成功');
-                goBackToLogin();
-            } else {
-                alert('修改失败: ' + (data.message || '未知错误'));
-            }
+        const data = await response.json();
+
+        if (data.success) {
+            alert('账号已成功注销');
+            window.location.href = '/login';
         } else {
-            const errorData = await response.json();
-            alert('修改失败: ' + (errorData.error || '未知错误'));
+            alert('注销失败: ' + (data.error || '未知错误'));
         }
     } catch (error) {
         alert('请求出错，请稍后再试');
@@ -83,19 +64,12 @@ async function handleChangePassword(event) {
     }
 }
 
-// 返回设置页面
+// 返回设置页面的函数
 function goBackToSettings() {
     window.location.href = '/settings';
-}
-
-function goBackToLogin() {
-    window.location.href = '/login';
 }
 
 // 页面加载时初始化
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
-
-    // 自动聚焦第一个输入框
-    document.getElementById('old-password').focus();
 });

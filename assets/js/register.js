@@ -35,6 +35,7 @@ function togglePasswordVisibility(inputId, icon) {
 
 function validateForm() {
     const username = document.getElementById('username').value;
+    const useraccount = document.getElementById('useraccount').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
@@ -44,6 +45,12 @@ function validateForm() {
     const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
     if (!usernameRegex.test(username)) {
         alert('用户名只能包含字母、数字和下划线，且长度在 3 到 20 个字符之间');
+        return false;
+    }
+
+    const useraccountRegex = /^[a-zA-Z0-9]{6,15}$/;
+    if (!useraccountRegex.test(useraccount)) {
+        alert('账号只能是由数字和字母组成的6~12位')
         return false;
     }
 
@@ -70,11 +77,13 @@ async function handleRegister(event) {
     if (!validateForm()) return;
 
     const username = document.getElementById('username').value;
+    const useraccount = document.getElementById('useraccount').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     const formData = new URLSearchParams();
     formData.append('username', username);
+    formData.append('useraccount',useraccount);
     formData.append('email', email);
     formData.append('password', password);
 
@@ -82,17 +91,21 @@ async function handleRegister(event) {
         const response = await fetch('/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Content-Type-Options':'nosniff',
+                'X-Frame-Options':'DENY',
             },
             body: formData
         });
 
-        if (response.ok) {
-            if (response.redirected) {
-                window.location.href = response.url; // 注册成功，重定向到登录页面
-            }
+        // 4. 解析响应数据
+        const data = await response.json();
+
+        console.log(data)
+
+        if (data.success) {
+            window.location.href = data.redirected; // 注册成功，重定向到登录页面
         } else {
-            const data = await response.json();
             alert(data.error); // 显示错误信息
         }
     } catch (error) {

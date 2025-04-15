@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>修改用户名 - Translate R1</title>
+    <title>注销账号 - Translate R1</title>
     <link rel="stylesheet" href="/static/font-awesome-css/all.min.css">
-    <link rel="stylesheet" href="/static/css/chang_username.css">
+    <link rel="stylesheet" href="/static/css/change_password.css">
 </head>
 <body>
-<button class="back-btn" onclick="goBackToPersonCenter()">
-    <i class="fas fa-arrow-left"></i> 返回个人中心
+<button class="back-btn" onclick="goBackToSettings()">
+    <i class="fas fa-arrow-left"></i> 返回设置
 </button>
 
 <div class="theme-switch" onclick="toggleTheme()">
@@ -24,18 +24,20 @@
         </div>
     </header>
     <main class="translator-box">
-        <h2 class="text-center">修改用户名</h2>
-        <form id="change-username-form" onsubmit="handleChangeUsername(event)">
+        <h2 class="text-center">注销账号</h2>
+        <form id="delete-account-form" onsubmit="handleDeleteAccount(event)">
             <div class="input-group">
-                <input type="text" id="new-username" name="new-username" placeholder="请输入新用户名" required>
+                <input type="password" id="password" name="password" placeholder="请输入密码" required>
+                <i onclick="togglePasswordVisibility('password', this)"></i>
             </div>
             <button class="action-btn" type="submit">
-                <i class="fas fa-user-edit"></i> 修改用户名
+                <i class="fas fa-exclamation-triangle"></i> 确认注销
             </button>
+            <p class="">此操作将永久删除您的所有数据且不可恢复！</p>
         </form>
     </main>
 </div>
 
-<script src="/static/js/change_username.js"></script>
+<script src="/static/js/delete_account.js"></script>
 </body>
 </html>

@@ -1,24 +1,23 @@
 package hanlders
 
 import (
+	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"translate-system/interal/database"
 	"translate-system/serve"
-
-	"github.com/gin-gonic/gin"
 )
 
-// 处理修改密码页面请求
-func ChangePasswordPageHandler(c *gin.Context) {
+// 处理注销账号页面请求
+func DeleteAccountPageHandler(c *gin.Context) {
 	if c.Request.Method == http.MethodGet {
-		c.HTML(http.StatusOK, "change_password.html", nil)
+		c.HTML(http.StatusOK, "delete_account.html", nil)
 		return
 	}
 }
 
-// 修改密码处理函数
-func ChangePasswordHandler(c *gin.Context) {
+// 注销账号密码验证函数
+func DeleteAccountHandler(c *gin.Context) {
 	if c.Request.Method != http.MethodPost {
 		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 POST 请求"})
 		return
@@ -34,8 +33,7 @@ func ChangePasswordHandler(c *gin.Context) {
 	}
 
 	var formData struct {
-		OldPassword string `json:"old_password" binding:"required"`
-		NewPassword string `json:"new_password" binding:"required,min=6"`
+		Password string `json:"password" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&formData); err != nil {
@@ -44,7 +42,7 @@ func ChangePasswordHandler(c *gin.Context) {
 		return
 	}
 
-	log.Printf("接收到的旧密码: %s, 新密码: %s", formData.OldPassword, formData.NewPassword)
+	log.Printf("接收到的密码: %s, ", formData.Password)
 
 	db := database.GetDB()
 
@@ -57,7 +55,7 @@ func ChangePasswordHandler(c *gin.Context) {
 	}
 	defer tx.Rollback()
 
-	// 验证旧密码
+	// 验证密码
 	var storedPassword string
 	err = tx.QueryRow("SELECT password FROM users WHERE username = ?", username).Scan(&storedPassword)
 	if err != nil {
@@ -67,42 +65,40 @@ func ChangePasswordHandler(c *gin.Context) {
 	}
 
 	// 这里应该使用密码哈希比较，而不是明文比较
-	if storedPassword != formData.OldPassword {
-		log.Printf("旧密码错误，用户名: %s", username)
-		c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "旧密码错误"})
+	if storedPassword != formData.Password {
+		log.Printf("密码错误，用户名: %s", username)
+		c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "密码错误"})
 		return
 	}
 
-	// 更新密码
-	result, err := tx.Exec("UPDATE users SET password = ? WHERE username = ?", formData.NewPassword, username)
+	// 1. 删除用户的历史记录
+	_, err = tx.Exec("DELETE FROM translation_history WHERE username = ?", username)
 	if err != nil {
-		log.Printf("更新密码时出错: %v", err)
-		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误"})
+		log.Printf("删除用户历史记录时出错: %v", err)
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
 
-	rowsAffected, err := result.RowsAffected()
+	// 2. 删除用户信息
+	_, err = tx.Exec("DELETE FROM users WHERE username = ?", username)
 	if err != nil {
-		log.Printf("获取影响行数时出错: %v", err)
-		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误"})
-		return
-	}
-
-	if rowsAffected == 0 {
-		log.Printf("未更新任何行，用户名: %s", username)
-		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "密码更新失败"})
+		log.Printf("删除用户信息时出错: %v", err)
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
 
 	// 提交事务
 	if err = tx.Commit(); err != nil {
 		log.Printf("提交事务时出错: %v", err)
-		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误"})
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
 
+	// 3. 清除用户的会话信息
+	c.SetCookie("username", "", -1, "/", "", false, true)
+
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": err,
+		"message": "账号注销成功",
 	})
 }

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登录 - Translate R1</title>
-    <link rel="stylesheet" href="../assets/font-awesome-css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="stylesheet" href="/static/font-awesome-css/all.min.css">
+    <link rel="stylesheet" href="/static/css/login.css">
 </head>
 <body>
 <div class="container">
@@ -23,10 +23,10 @@
         <h2 class="text-center">登录</h2>
         <form id="login-form" action="/login" method="post" onsubmit="handleLogin(event)">
             <div class="text-box">
-                <input type="text" id="username" name="username" placeholder="用户名" required>
+                <input type="text" id="useraccount" name="useraccount" placeholder="请输入账号.." required>
             </div>
             <div class="text-box">
-                <input type="password" id="password" name="password" placeholder="密码" required>
+                <input type="password" id="password" name="password" placeholder="密码.." required>
                 <i onclick="togglePasswordVisibility('password', this)"></i>
             </div>
             <button class="translate-btn" type="submit">
@@ -38,6 +38,6 @@
     </main>
 </div>
 
-<script src="../assets/js/login.js"></script>
+<script src="/static/js/login.js"></script>
 </body>
 </html>

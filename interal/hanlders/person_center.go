@@ -1,98 +1,94 @@
 package hanlders
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"translate-system/interal/database"
 	"translate-system/serve"
+
+	"github.com/gin-gonic/gin"
 )
 
 // 获取用户信息处理函数
-func GetUserInfoHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "只支持 GET 请求"})
+func GetUserInfoHandler(c *gin.Context) {
+	if c.Request.Method != http.MethodGet {
+		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 GET 请求"})
 		return
 	}
 
-	username := serve.GetUsernameFromCookie(r)
-	if username == "" {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "用户未登录"})
-		return
-	}
+	//username, err := serve.GetUsernameFromCookie(c)
+	//if err != nil {
+	//	c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: err.Error()})
+	//}
+	//if username == "" {
+	//	c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "用户未登录"})
+	//	return
+	//}
+
+	useraccount := serve.GetUserAccount(c)
+	//if err != nil {c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: err.Error()})}
+	//if useraccount == "" {
+	//	c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "用户未登录"})
+	//	return
+	//}
 
 	db := database.GetDB()
 	var userID int
+	var username string
 	var email string
-	err := db.QueryRow("SELECT user_id, email FROM users WHERE username = ?", username).Scan(&userID, &email)
+	err := db.QueryRow("SELECT user_id, username, email FROM users WHERE useraccount = ?", useraccount).Scan(&userID, &username, &email)
 	if err != nil {
 		log.Printf("查询用户信息时出错: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
 
-	userInfo := map[string]interface{}{
-		"username": username,
-		"email":    email,
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(userInfo)
+	c.JSON(http.StatusOK, gin.H{
+		"username":    username,
+		"email":       email,
+		"useraccount": useraccount,
+	})
 }
 
 // 修改用户名处理函数
-func ChangeUsernameHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "只支持 POST 请求"})
+func ChangeUsernameHandler(c *gin.Context) {
+	if c.Request.Method != http.MethodPost {
+		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 POST 请求"})
 		return
 	}
 
-	username := serve.GetUsernameFromCookie(r)
+	username, err := serve.GetUsernameFromCookie(c)
+	if err != nil {
+		return
+	}
 	if username == "" {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "用户未登录"})
+		c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "用户未登录"})
 		return
 	}
 
 	var formData struct {
-		NewUsername string `json:"new_username"`
+		NewUsername string `json:"new_username" binding:"required"`
 	}
 
-	err := json.NewDecoder(r.Body).Decode(&formData)
-	if err != nil {
+	if err := c.ShouldBindJSON(&formData); err != nil {
 		log.Printf("解析请求体时出错: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "请求体格式错误"})
+		c.JSON(http.StatusBadRequest, serve.ErrorResponse{Error: "请求体格式错误"})
 		return
 	}
 
-	// 检查新用户名是否已经存在
 	db := database.GetDB()
+
+	// 检查新用户名是否已经存在
 	var count int
 	err = db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", formData.NewUsername).Scan(&count)
 	if err != nil {
 		log.Printf("查询用户名是否存在时出错: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
 
 	if count > 0 {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "该用户名已被使用，请选择其他用户名"})
+		c.JSON(http.StatusBadRequest, serve.ErrorResponse{Error: "该用户名已被使用，请选择其他用户名"})
 		return
 	}
 
@@ -100,82 +96,66 @@ func ChangeUsernameHandler(w http.ResponseWriter, r *http.Request) {
 	tx, err := db.Begin()
 	if err != nil {
 		log.Printf("开启事务时出错: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
+	defer tx.Rollback() // 确保在出错时回滚
 
 	// 更新用户名
-	_, err = db.Exec("UPDATE users SET username = ? WHERE username = ?", formData.NewUsername, username)
+	_, err = tx.Exec("UPDATE users SET username = ? WHERE username = ?", formData.NewUsername, username)
 	if err != nil {
 		log.Printf("更新用户名时出错: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
 
 	// 更新 translation_history 表中的用户名
-	_, err = db.Exec("UPDATE translation_history SET username = ? WHERE username = ?", formData.NewUsername, username)
+	_, err = tx.Exec("UPDATE translation_history SET username = ? WHERE username = ?", formData.NewUsername, username)
 	if err != nil {
 		log.Printf("更新历史记录中的用户名时出错: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
 
 	// 提交事务
-	err = tx.Commit()
-	if err != nil {
+	if err = tx.Commit(); err != nil {
 		log.Printf("提交事务时出错: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
 
 	// 更新会话 Cookie
-	cookie := http.Cookie{
-		Name:  "username",
-		Value: formData.NewUsername,
-		Path:  "/",
-	}
-	http.SetCookie(w, &cookie)
+	c.SetCookie("username", formData.NewUsername, 0, "/", "", false, true)
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "用户名修改成功"})
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": err,
+	})
 }
 
 // 修改邮箱处理函数
-func ChangeEmailHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "只支持 POST 请求"})
+func ChangeEmailHandler(c *gin.Context) {
+	if c.Request.Method != http.MethodPost {
+		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 POST 请求"})
 		return
 	}
 
-	username := serve.GetUsernameFromCookie(r)
+	username, err := serve.GetUsernameFromCookie(c)
+	if err != nil {
+		return
+	}
 	if username == "" {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "用户未登录"})
+		c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "用户未登录"})
 		return
 	}
 
 	var formData struct {
-		NewEmail string `json:"new_email"`
+		NewEmail string `json:"new_email" binding:"required,email"`
 	}
 
-	err := json.NewDecoder(r.Body).Decode(&formData)
-	if err != nil {
+	if err := c.ShouldBindJSON(&formData); err != nil {
 		log.Printf("解析请求体时出错: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "请求体格式错误"})
+		c.JSON(http.StatusBadRequest, serve.ErrorResponse{Error: "请求体格式错误"})
 		return
 	}
 
@@ -185,13 +165,12 @@ func ChangeEmailHandler(w http.ResponseWriter, r *http.Request) {
 	_, err = db.Exec("UPDATE users SET email = ? WHERE username = ?", formData.NewEmail, username)
 	if err != nil {
 		log.Printf("更新邮箱时出错: %v", err)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
+		c.JSON(http.StatusInternalServerError, serve.ErrorResponse{Error: "服务器内部错误，请稍后再试"})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "邮箱修改成功"})
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": err,
+	})
 }

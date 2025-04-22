@@ -54,8 +54,10 @@ func SettingRoutes(r *gin.Engine) {
 	r.GET("/change_password", hanlders.ChangePasswordPageHandler)
 	r.GET("/change_my_password", hanlders.ChangePasswordHandler)
 	r.POST("/change_my_password", hanlders.ChangePasswordHandler)
-	r.GET("/userPermission_page", hanlders.UserPermissionPageHandler)
-	r.POST("/userPermission_page", hanlders.UserPermissionPageHandler)
+
+	r.GET("/check_userPermission", hanlders.UserPermissionPageHandler)
+	//r.POST("/userPermission_page", hanlders.UserPermissionPageHandler)
+	r.GET("/userPermission_page", hanlders.UserPermissionPage)
 	r.GET("/get_userPermission_page", hanlders.GetUserPermission)
 	r.GET("/get_all_roles", hanlders.GetAllRoles)
 	r.POST("/update_user_permission", hanlders.UpdateUserPermission)

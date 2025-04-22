@@ -4,20 +4,36 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strings"
+	"translate-system/Permission"
 	"translate-system/interal/database"
 	"translate-system/serve"
 )
 
-// 处理注销账号页面请求
 func DeleteAccountPageHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/delete_account") {
+		DeleteAccountPage(c)
+	}
+}
+
+// 处理注销账号页面请求
+func DeleteAccountPage(c *gin.Context) {
 	if c.Request.Method == http.MethodGet {
 		c.HTML(http.StatusOK, "delete_account.html", nil)
 		return
 	}
 }
 
-// 注销账号密码验证函数
 func DeleteAccountHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/delete_my_account") {
+		DeleteAccount(c)
+	}
+}
+
+// 注销账号密码验证函数
+func DeleteAccount(c *gin.Context) {
 	if c.Request.Method != http.MethodPost {
 		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 POST 请求"})
 		return

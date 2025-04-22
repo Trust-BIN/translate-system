@@ -3,22 +3,38 @@ package hanlders
 import (
 	"log"
 	"net/http"
+	"strings"
+	"translate-system/Permission"
 	"translate-system/interal/database"
 	"translate-system/serve"
 
 	"github.com/gin-gonic/gin"
 )
 
-// 处理修改密码页面请求
 func ChangePasswordPageHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/change_password") {
+		ChangePasswordPage(c)
+	}
+}
+
+// 处理修改密码页面请求
+func ChangePasswordPage(c *gin.Context) {
 	if c.Request.Method == http.MethodGet {
 		c.HTML(http.StatusOK, "change_password.html", nil)
 		return
 	}
 }
 
-// 修改密码处理函数
 func ChangePasswordHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/change_my_password") {
+		ChangePassword(c)
+	}
+}
+
+// 修改密码处理函数
+func ChangePassword(c *gin.Context) {
 	if c.Request.Method != http.MethodPost {
 		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 POST 请求"})
 		return

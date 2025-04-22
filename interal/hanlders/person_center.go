@@ -3,34 +3,29 @@ package hanlders
 import (
 	"log"
 	"net/http"
+	"strings"
+	"translate-system/Permission"
 	"translate-system/interal/database"
 	"translate-system/serve"
 
 	"github.com/gin-gonic/gin"
 )
 
-// 获取用户信息处理函数
 func GetUserInfoHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/get_user_info") {
+		GetUserInfo(c)
+	}
+}
+
+// 获取用户信息处理函数
+func GetUserInfo(c *gin.Context) {
 	if c.Request.Method != http.MethodGet {
 		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 GET 请求"})
 		return
 	}
 
-	//username, err := serve.GetUsernameFromCookie(c)
-	//if err != nil {
-	//	c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: err.Error()})
-	//}
-	//if username == "" {
-	//	c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "用户未登录"})
-	//	return
-	//}
-
 	useraccount := serve.GetUserAccount(c)
-	//if err != nil {c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: err.Error()})}
-	//if useraccount == "" {
-	//	c.JSON(http.StatusUnauthorized, serve.ErrorResponse{Error: "用户未登录"})
-	//	return
-	//}
 
 	db := database.GetDB()
 	var userID int
@@ -50,8 +45,16 @@ func GetUserInfoHandler(c *gin.Context) {
 	})
 }
 
-// 修改用户名处理函数
 func ChangeUsernameHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/change_username") {
+		ChangeUsername(c)
+	}
+}
+
+// 修改用户名处理函数
+func ChangeUsername(c *gin.Context) {
+
 	if c.Request.Method != http.MethodPost {
 		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 POST 请求"})
 		return
@@ -133,8 +136,15 @@ func ChangeUsernameHandler(c *gin.Context) {
 	})
 }
 
-// 修改邮箱处理函数
 func ChangeEmailHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/change_email") {
+		ChangeEmail(c)
+	}
+}
+
+// 修改邮箱处理函数
+func ChangeEmail(c *gin.Context) {
 	if c.Request.Method != http.MethodPost {
 		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 POST 请求"})
 		return

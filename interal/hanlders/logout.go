@@ -3,11 +3,20 @@ package hanlders
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
+	"translate-system/Permission"
 	"translate-system/serve"
 )
 
-// 退出登录处理
 func LogoutHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/logout") {
+		Logout(c)
+	}
+}
+
+// 退出登录处理
+func Logout(c *gin.Context) {
 	if c.Request.Method != http.MethodGet {
 		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 GET 请求"})
 		return

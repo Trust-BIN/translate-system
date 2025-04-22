@@ -7,13 +7,24 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"translate-system/Permission"
 	"translate-system/serve"
 
 	"github.com/gin-gonic/gin"
 )
 
-/* 翻译处理 */
 func TranslateHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	fmt.Println(permissionCode)
+	if strings.Contains(permissionCode, "/translate") {
+		Translate(c)
+	} else {
+		fmt.Println("权限不足")
+	}
+}
+
+/* 翻译处理 */
+func Translate(c *gin.Context) {
 	var req serve.RequestBody
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "请求解析失败"})

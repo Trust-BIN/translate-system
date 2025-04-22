@@ -29,6 +29,10 @@ function goToDeleteAccountPage(){
     window.location.href = '/delete_account'
 }
 
+function goToUserPermissionPage(){
+    window.location.href = '/userPermission_page'
+}
+
 // 返回翻译主界面的函数
 function goBackToTranslate() {
     window.location.href = '/';

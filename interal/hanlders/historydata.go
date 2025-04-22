@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
+	"translate-system/Permission"
 	"translate-system/interal/database"
 	"translate-system/serve"
 
@@ -24,8 +26,15 @@ type HistoryResponse struct {
 	Data    []HistoryRecord `json:"data"`
 }
 
-// 历史记录处理
 func HistoryDataHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/trans_history") {
+		HistoryData(c)
+	}
+}
+
+// 历史记录处理
+func HistoryData(c *gin.Context) {
 	// 从Cookie获取用户名
 	useraccount := serve.GetUserAccount(c)
 	if useraccount == "" {
@@ -38,6 +47,7 @@ func HistoryDataHandler(c *gin.Context) {
 
 	// 查询该用户的历史翻译记录
 	query := fmt.Sprintf("SELECT original_text, translated_text, translation_time FROM translation_history WHERE useraccount = (SELECT user_id FROM users WHERE useraccount = '%s') ORDER BY translation_time DESC", useraccount)
+	//fmt.Println(query)
 	rows, err := db.Query(query)
 	if err != nil {
 		log.Printf("查询历史记录失败: %v", err)
@@ -92,8 +102,15 @@ func insertTranslationHistory(username string, sourceText string, translatedText
 	return nil
 }
 
-// 删除历史记录处理函数
 func DeleteHistoryRecordHandler(c *gin.Context) {
+	permissionCode := Permission.Permission(c)
+	if strings.Contains(permissionCode, "/delete_history_record") {
+		DeleteHistoryRecord(c)
+	}
+}
+
+// 删除历史记录处理函数
+func DeleteHistoryRecord(c *gin.Context) {
 	if c.Request.Method != http.MethodDelete {
 		c.JSON(http.StatusMethodNotAllowed, serve.ErrorResponse{Error: "只支持 Delete 请求"})
 		return

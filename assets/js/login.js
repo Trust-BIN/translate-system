@@ -9,7 +9,7 @@ async function handleLogin(event) {
 
     // 确保用户名和密码不为空
     if (!useraccount || !password) {
-        alert('请输入用户名和密码');
+        showCustomAlert('请输入用户名和密码');
         return;
     }
 
@@ -38,10 +38,10 @@ async function handleLogin(event) {
             window.location.href = data.redirected; // 跳转到指定页面
         } else {
             // 登录失败显示错误信息
-            alert('error:'+ (data.error || '登录失败'));
+            showCustomAlert('error:'+ (data.error || '登录失败'));
         }
     } catch (error) {
-        alert('请求出错，请稍后再试');
+        showCustomAlert('请求出错，请稍后再试');
         console.error(error);
     }
 }

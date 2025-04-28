@@ -7,14 +7,15 @@
     --success-color: #4cc9f0;
     --light-color: #f4f4f9;
     --dark-color: #212529;
-    --card-bg: white;
+    --card-bg: rgba(255,255,255,0.5);
     --text-color: #333;
     --border-color: #ced4da;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     --gradient-bg: linear-gradient(135deg, #f4f4f9 0%, #f0f4ff 100%);
-    --header-bg: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    --header-bg: linear-gradient(135deg, rgba(67, 97, 238, 0.5) 0%, rgba(58, 12, 163, 0.5) 100%);
     --info-bg: rgba(67, 97, 238, 0.05);
+    --background-image: url('/static/images/background-light.jpg');
 }
 
 [data-theme="dark"] {
@@ -25,14 +26,15 @@
     --success-color: #4cc9f0;
     --light-color: #1a1a2e;
     --dark-color: #f8f9fa;
-    --card-bg: #0f3460;
+    --card-bg: rgba(15,52,96,0.5);
     --text-color: #e2e8f0;
     --border-color: #2d3748;
     --shadow-color: rgba(0, 0, 0, 0.3);
     --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
     --gradient-bg: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
-    --header-bg: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    --header-bg: linear-gradient(135deg, rgba(15, 52, 96, 0.5) 0%, rgba(22, 33, 62, 0.5) 100%);
     --info-bg: rgba(72, 149, 239, 0.1);
+    --background-image: url('/static/images/background-dark.jpg');
 }
 
 /* 基础样式 */
@@ -49,6 +51,12 @@ body {
     color: var(--text-color);
     min-height: 100vh;
     line-height: 1.6;
+
+    /* 修改背景样式 */
+    background-image: var(--background-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* 容器样式 */
@@ -57,6 +65,7 @@ body {
     margin: 0 auto;
     padding: 2rem;
     padding-top: 5rem;
+    animation: fadeInUp 0.5s ease;
 }
 
 /* 头部样式 */
@@ -227,6 +236,18 @@ body {
 .theme-switch i {
     color: var(--primary-color);
     font-size: 1.2rem;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* 响应式设计 */

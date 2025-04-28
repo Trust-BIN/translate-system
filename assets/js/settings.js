@@ -60,11 +60,11 @@ async function fetchUser(){
                     window.location.href = data.redirected
                 }else{
                     console.error("错误信息：", data.message)
-                    alert("用户权限不足")
+                    showCustomAlert("用户权限不足")
                 }
         })
         .catch(error => {
             console.error('获取用户权限时出错:', error);
-            alert('获取用户权限数据失败1，请稍后重试');
+            showCustomAlert('获取用户权限数据失败，请稍后重试');
         });
 }

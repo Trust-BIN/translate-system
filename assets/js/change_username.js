@@ -28,7 +28,7 @@ async function handleChangeUsername(event) {
     const newUsername = document.getElementById('new-username').value.trim();
 
     if (!newUsername) {
-        alert('请输入有效用户名');
+        showCustomAlert('请输入有效用户名');
         return;
     }
 
@@ -49,14 +49,14 @@ async function handleChangeUsername(event) {
                 alert('用户名修改成功');
                 goBackToPersonCenter();
             } else {
-                alert('修改失败: ' + (data.message || '未知错误'));
+                showCustomAlert('修改失败: ' + (data.message || '未知错误'));
             }
         } else {
             const errorData = await response.json();
-            alert('修改失败: ' + (errorData.error || '未知错误'));
+            showCustomAlert('修改失败: ' + (errorData.error || '未知错误'));
         }
     } catch (error) {
-        alert('请求出错，请稍后再试');
+        showCustomAlert('请求出错，请稍后再试');
         console.error(error);
     }
 }

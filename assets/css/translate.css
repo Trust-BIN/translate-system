@@ -37,6 +37,7 @@ body {
 /* 侧边栏样式 */
 .left_nav {
     width: 280px;
+    /*background-color: rgba(var(--card-bg-rgb), 0.5);*/
     background: var(--sidebar-bg);
     color: var(--sidebar-text);
     padding: 2rem 1.5rem;
@@ -44,6 +45,7 @@ body {
     flex-direction: column;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 10;
+    animation: fadeInUp 0.5s ease;
 }
 
 .iocn {
@@ -137,8 +139,10 @@ body {
 .container {
     flex-grow: 1;
     padding: 2rem;
-    background-color: var(--light-color);
+    background-color: var(--card-bg);
+    /*background-color: var(--light-color);*/
     overflow-y: auto;
+    animation: fadeInUp 0.5s ease;
 }
 
 .header {
@@ -383,6 +387,18 @@ textarea {
     100% { transform: rotate(360deg); }
 }
 
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* 响应式设计 */
 @media (max-width: 992px) {
     .page-container {
@@ -451,14 +467,20 @@ textarea {
     --dark-color: #212529;
     --text-color: #212529;
     --bg-color: #f5f7fb;
-    --card-bg: white;
+    --card-bg: rgba(255, 255, 255, 0.1);
+    /*--card-bg: white;*/
     --header-bg: var(--primary-color);
     --header-text: white;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --border-color: #ddd;
-    --select-bg: #007bff;
+    --select-bg: rgba(0, 123, 255, 0.5);
+    --background-image: url('/static/images/background-light.jpg');
+    /*--select-bg: #007bff;*/
+
+    /*--card-bg-rgb: 255,255,255;*/
+
     /*侧边栏*/
-    --sidebar-bg: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    --sidebar-bg: linear-gradient(135deg,  rgba(67, 97, 238, 0.3) 0%, rgba(58, 12, 163, 0.3) 100%);
     --sidebar-text: white;
     --sidebar-icon-bg: rgba(255, 255, 255, 0.2);
     --sidebar-hover: rgba(255, 255, 255, 0.1);
@@ -473,14 +495,18 @@ textarea {
     --dark-color: #f8f9fa;
     --text-color: #f8f9fa;
     --bg-color: #16213e;
-    --card-bg: #284261;
+    --card-bg: rgba(40, 66, 97, 0.5);
+    /*--card-bg: #284261;*/
     --header-bg: #0f3460;
     --header-text: #f8f9fa;
     --shadow-color: rgba(0, 0, 0, 0.3);
     --border-color: #2d3748;
-    --select-bg: rgba(67, 97, 238, 0.2);
+    --select-bg: rgba(60, 60, 60, 0.2);
+    --background-image: url('/static/images/background-dark.jpg');
+
     /*侧边栏*/
-    --sidebar-bg: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    /*--sidebar-bg: linear-gradient(135deg, #0f3460 0%, #16213e 100%);*/
+    --sidebar-bg: linear-gradient(135deg, rgba(15, 52, 96, 0.3) 0%, rgba(22, 33, 62, 0.3) 100%);
     --sidebar-text: #e2e8f0;
     --sidebar-icon-bg: rgba(226, 232, 240, 0.2);
     --sidebar-hover: rgba(226, 232, 240, 0.1);
@@ -546,6 +572,12 @@ textarea {
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
+
+    /* 修改背景样式 */
+    background-image: var(--background-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .input-section, .output-section {

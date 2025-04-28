@@ -49,7 +49,6 @@ func Permission(c *gin.Context) string {
 		return "err"
 	}
 	return PermissionCode
-	//defer rows.Close()
 }
 
 func GetRoleId(c *gin.Context) int {

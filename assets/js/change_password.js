@@ -43,13 +43,13 @@ async function handleChangePassword(event) {
 
     // 验证新密码和确认密码是否一致
     if (newPassword !== confirmPassword) {
-        alert('新密码和确认密码不一致');
+        showCustomAlert('新密码和确认密码不一致');
         return;
     }
 
     // 验证密码强度（可选）
     if (newPassword.length < 6) {
-        alert('密码长度至少为6位');
+        showCustomAlert('密码长度至少为6位');
         return;
     }
 
@@ -68,17 +68,17 @@ async function handleChangePassword(event) {
         if (response.ok) {
             const data = await response.json();
             if (data.success) {
-                alert('密码修改成功');
+                showCustomAlert('密码修改成功');
                 goBackToLogin();
             } else {
-                alert('修改失败: ' + (data.message || '未知错误'));
+                showCustomAlert('修改失败: ' + (data.message || '未知错误'));
             }
         } else {
             const errorData = await response.json();
-            alert('修改失败: ' + (errorData.error || '未知错误'));
+            showCustomAlert('修改失败: ' + (errorData.error || '未知错误'));
         }
     } catch (error) {
-        alert('请求出错，请稍后再试');
+        showCustomAlert('请求出错，请稍后再试');
         console.error(error);
     }
 }

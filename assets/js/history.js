@@ -58,14 +58,14 @@ async function fetchHistory() {
             // console.log(data)
         } else {
             console.error('获取历史记录失败:', data.message || '未知错误');
-            alert('获取历史记录失败: ' + (data.message || '未知错误'));
+            showCustomAlert('获取历史记录失败: ' + (data.message || '未知错误'));
         }
     } catch (error) {
         console.error('获取历史记录时出错:', error);
         if (error.message.includes('401')) {
             window.location.href = '/login';
         } else {
-            alert('获取历史记录时出错: ' + error.message);
+            showCustomAlert('获取历史记录时出错: ' + error.message);
         }
     }
 }
@@ -160,14 +160,14 @@ async function deleteHistoryRecord(originalText, translationTime) {
         });
 
         if (response.ok) {
-            alert('历史记录删除成功');
+            showCustomAlert('历史记录删除成功');
             await fetchHistory();
         } else {
             const errorData = await response.json();
-            alert('删除失败: ' + (errorData.error || '未知错误'));
+            showCustomAlert('删除失败: ' + (errorData.error || '未知错误'));
         }
     } catch (error) {
-        alert('请求出错，请稍后再试');
+        showCustomAlert('请求出错，请稍后再试');
         console.error(error);
     }
 }

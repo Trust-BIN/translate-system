@@ -30,7 +30,7 @@ async function handleChangeEmail(event) {
     // 简单的邮箱格式验证
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(newEmail)) {
-        alert('请输入有效的邮箱地址');
+        showCustomAlert('请输入有效的邮箱地址');
         return;
     }
 
@@ -48,17 +48,17 @@ async function handleChangeEmail(event) {
         if (response.ok) {
             const data = await response.json();
             if (data.success) {
-                alert('邮箱修改成功');
+                showCustomAlert('邮箱修改成功');
                 goBackToPersonCenter();
             } else {
-                alert('修改失败: ' + (data.message || '未知错误'));
+                showCustomAlert('修改失败: ' + (data.message || '未知错误'));
             }
         } else {
             const errorData = await response.json();
-            alert('修改失败: ' + (errorData.error || '未知错误'));
+            showCustomAlert('修改失败: ' + (errorData.error || '未知错误'));
         }
     } catch (error) {
-        alert('请求出错，请稍后再试');
+        showCustomAlert('请求出错，请稍后再试');
         console.error(error);
     }
 }

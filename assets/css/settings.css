@@ -7,12 +7,13 @@
     --danger-hover: #c82333;
     --light-color: #f4f4f9;
     --dark-color: #212529;
-    --card-bg: white;
+    --card-bg: rgba(255,255,255,0.5);
     --text-color: #333;
     --border-color: #ced4da;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     --gradient-bg: linear-gradient(135deg, #f4f4f9 0%, #f0f4ff 100%);
+    --background-image: url('/static/images/background-light.jpg');
 }
 
 [data-theme="dark"] {
@@ -23,12 +24,13 @@
     --danger-hover: #d90429;
     --light-color: #1a1a2e;
     --dark-color: #f8f9fa;
-    --card-bg: #0f3460;
+    --card-bg: rgba(15,52,96,0.5);
     --text-color: #e2e8f0;
     --border-color: #2d3748;
     --shadow-color: rgba(0, 0, 0, 0.3);
     --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
     --gradient-bg: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+    --background-image: url('/static/images/background-dark.jpg');
 }
 
 /* 基础样式 */
@@ -45,6 +47,12 @@ body {
     color: var(--text-color);
     min-height: 100vh;
     line-height: 1.6;
+
+    /* 修改背景样式 */
+    background-image: var(--background-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* 容器样式 */

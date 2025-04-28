@@ -6,6 +6,7 @@
     <title>注册 - Translate R1</title>
     <link rel="stylesheet" href="/static/font-awesome-css/all.min.css">
     <link rel="stylesheet" href="/static/css/register.css">
+    <link rel="stylesheet" href="/static/css/custom_alert.css"> <!-- 引入自定义提示框的 CSS -->
 </head>
 <body>
 <div class="container">
@@ -16,12 +17,38 @@
     <header class="header">
         <div class="logo">
             <i class="fas fa-language"></i>
-            <h1>Translate R1</h1>
+            <h1>Translate</h1>
         </div>
     </header>
     <main class="translator-box">
         <h2 class="text-center">注册</h2>
         <form id="register-form" action="/register" method="post" onsubmit="return validateForm() && handleRegister(event)">
+            <!--=================================================================================-->
+
+<!--            <div class="container">-->
+<!--                <h1>上传头像</h1>-->
+<!--                <div class="avatar-upload">-->
+<!--                    <div class="avatar-preview" id="avatarPreview">-->
+<!--                        <i>+</i>-->
+<!--                        <img id="previewImage" src="" alt="头像预览">-->
+<!--                    </div>-->
+
+<!--                    <input type="file" id="fileInput" class="file-input" accept="image/*">-->
+<!--                    <button class="upload-btn" id="uploadBtn">选择头像</button>-->
+
+<!--                    <div class="upload-info">-->
+<!--                        支持 JPG、PNG 格式，大小不超过 2MB-->
+<!--                    </div>-->
+
+<!--                    <div class="progress-container" id="progressContainer">-->
+<!--                        <div class="progress-bar" id="progressBar"></div>-->
+<!--                    </div>-->
+
+<!--                    <div class="error-message" id="errorMessage"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <!--=================================================================================-->
             <div class="input-group">
                 <input type="text" id="username" name="username" placeholder="用户名" required>
                 <div class="error-message" id="username-error"></div>
@@ -53,6 +80,15 @@
     </main>
 </div>
 
+<!-- 引入自定义提示框的 HTML -->
+<div id="custom-alert-overlay" class="custom-alert-overlay" style="display: none;">
+    <div class="custom-alert">
+        <div class="custom-alert-message" id="custom-alert-message"></div>
+        <button class="custom-alert-button" onclick="hideCustomAlert()">确认</button>
+    </div>
+</div>
+
 <script src="/static/js/register.js"></script>
+<script src="/static/js/custom_alert.js"></script> <!-- 引入自定义提示框的 JavaScript -->
 </body>
 </html>

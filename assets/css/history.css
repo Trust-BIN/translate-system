@@ -7,7 +7,7 @@
     --danger-hover: #c82333;
     --light-color: #f4f4f9;
     --dark-color: #212529;
-    --card-bg: white;
+    --card-bg: rgba(255,255,255,0.5);
     --text-color: #333;
     --border-color: #ddd;
     --hover-bg: #e0e0e0;
@@ -18,6 +18,7 @@
     --search-border: #ccc;
     --search-focus: #007BFF;
     --even-row: #f2f2f2;
+    --background-image: url('/static/images/background-light.jpg');
 }
 
 [data-theme="dark"] {
@@ -28,7 +29,7 @@
     --danger-hover: #d90429;
     --light-color: #1a1a2e;
     --dark-color: #f8f9fa;
-    --card-bg: #0f3460;
+    --card-bg: rgba(15,52,96,0.5);
     --text-color: #e2e8f0;
     --border-color: #2d3748;
     --hover-bg: #16213e;
@@ -39,6 +40,7 @@
     --search-border: #2d3748;
     --search-focus: #4895ef;
     --even-row: rgba(72, 149, 239, 0.1);
+    --background-image: url('/static/images/background-dark.jpg');
 }
 
 /* 基础样式 */
@@ -54,6 +56,12 @@ body {
     background-color: var(--light-color);
     color: var(--text-color);
     min-height: 100vh;
+
+    /* 修改背景样式 */
+    background-image: var(--background-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* 容器样式 */
@@ -62,6 +70,7 @@ body {
     margin: 0 auto;
     padding: 2rem;
     padding-top: 4rem;
+    animation: fadeInUp 0.5s ease;
 }
 
 h1 {
@@ -195,6 +204,18 @@ h1 {
 .theme-switch i {
     color: var(--primary-color);
     font-size: 1.2rem;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* 响应式设计 */

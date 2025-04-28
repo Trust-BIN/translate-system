@@ -15,10 +15,10 @@ window.onload = async function () {
             document.getElementById('useraccount').textContent = data.useraccount;
         } else {
             const errorData = await response.json();
-            alert(errorData.error);
+            showCustomAlert(errorData.error);
         }
     } catch (error) {
-        alert('请求出错，请稍后再试');
+        showCustomAlert('请求出错，请稍后再试');
         console.error(error);
     }
 };

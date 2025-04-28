@@ -8,15 +8,16 @@
     --warning-color: #ffc107;
     --light-color: #f8f9fa;
     --dark-color: #212529;
-    --card-bg: white;
+    --card-bg: rgba(255,255,255,0.5);
     --text-color: #333;
     --border-color: #ced4da;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    --header-bg: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    --header-bg: linear-gradient(135deg, rgba(67, 97, 238, 0.5) 0%, rgba(58, 12, 163, 0.5) 100%);
     --table-header-bg: #f8f9fa;
     --table-row-even: #f8f9fa;
     --table-row-hover: #e9ecef;
+    --background-image: url('/static/images/background-light.jpg');
 }
 
 [data-theme="dark"] {
@@ -28,15 +29,16 @@
     --warning-color: #ffd166;
     --light-color: #1a1a2e;
     --dark-color: #f8f9fa;
-    --card-bg: #0f3460;
+    --card-bg: rgba(15,52,96,0.5);
     --text-color: #e2e8f0;
     --border-color: #2d3748;
     --shadow-color: rgba(0, 0, 0, 0.3);
     --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-    --header-bg: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    --header-bg: linear-gradient(135deg, rgba(15, 52, 96, 0.5) 0%, rgba(22, 33, 62, 0.5) 100%);
     --table-header-bg: #16213e;
     --table-row-even: rgba(72, 149, 239, 0.1);
     --table-row-hover: rgba(72, 149, 239, 0.2);
+    --background-image: url('/static/images/background-dark.jpg');
 }
 
 /* 基础样式 */
@@ -53,6 +55,12 @@ body {
     color: var(--text-color);
     min-height: 100vh;
     line-height: 1.6;
+
+    /* 修改背景样式 */
+    background-image: var(--background-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* 容器样式 */
@@ -61,6 +69,7 @@ body {
     margin: 0 auto;
     padding: 2rem;
     padding-top: 5rem;
+    animation: fadeInUp 0.5s ease;
 }
 
 /* 头部样式 */
@@ -251,9 +260,30 @@ body {
     justify-content: center;
 }
 
-.edit-btn {
-    background-color: rgba(67, 97, 238, 0.1);
-    color: var(--primary-color);
+.btn-edit {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%); /* 使用渐变背景 */
+    color: white; /* 文字颜色为白色 */
+    border: none; /* 移除边框 */
+    padding: 0.6rem 1.2rem; /* 调整内边距 */
+    border-radius: 0.75rem; /* 添加圆角 */
+    cursor: pointer; /* 鼠标指针变为手型 */
+    transition: all 0.3s ease; /* 添加过渡效果 */
+    font-size: 0.8rem; /* 设置字体大小 */
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); /* 添加阴影 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-edit:hover {
+    transform: translateY(-3px); /* 鼠标悬停时向上移动 */
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08); /* 鼠标悬停时增加阴影 */
+    background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 100%); /* 鼠标悬停时改变渐变方向 */
+}
+
+.btn-edit i {
+    font-size: 0.8rem; /* 设置图标大小 */
 }
 
 .delete-btn {
@@ -339,6 +369,30 @@ body {
     margin-top: 2rem;
 }
 
+/* 返回按钮样式 */
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: var(--shadow-color);
+    transition: all 0.3s ease;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
 /* 主题切换按钮 */
 .theme-switch {
     position: fixed;
@@ -364,6 +418,18 @@ body {
 .theme-switch i {
     color: var(--primary-color);
     font-size: 1.2rem;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* 响应式设计 */

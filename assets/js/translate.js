@@ -22,7 +22,7 @@ function updateCharCount() {
 // 验证输入
 function validateInput(text) {
     if (text.length === 0) {
-        alert('请输入需要翻译的文本');
+        showCustomAlert('请输入需要翻译的文本');
         return false;
     }
     return true;
@@ -250,7 +250,7 @@ async function logout() {
         }
     } catch (error) {
         console.error('退出登录出错:', error);
-        alert('退出登录出错，请稍后再试');
+        showCustomAlert('退出登录出错，请稍后再试');
     }
 }
 

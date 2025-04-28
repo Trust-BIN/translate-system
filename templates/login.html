@@ -6,6 +6,7 @@
     <title>登录 - Translate R1</title>
     <link rel="stylesheet" href="/static/font-awesome-css/all.min.css">
     <link rel="stylesheet" href="/static/css/login.css">
+    <link rel="stylesheet" href="/static/css/custom_alert.css"> <!-- 引入自定义提示框的 CSS -->
 </head>
 <body>
 <div class="container">
@@ -16,7 +17,7 @@
     <header class="header">
         <div class="logo">
             <i class="fas fa-language"></i>
-            <h1>Translate R1</h1>
+            <h1>Translate</h1>
         </div>
     </header>
     <main class="translator-box">
@@ -27,7 +28,7 @@
             </div>
             <div class="text-box">
                 <input type="password" id="password" name="password" placeholder="密码.." required>
-                <i onclick="togglePasswordVisibility('password', this)"></i>
+                <i class="fa fa-eye password-toggle" onclick="togglePasswordVisibility('password', this)"></i>
             </div>
             <button class="translate-btn" type="submit">
                 <i class="fas fa-sign-in-alt"></i>
@@ -38,6 +39,15 @@
     </main>
 </div>
 
+<!-- 引入自定义提示框的 HTML -->
+<div id="custom-alert-overlay" class="custom-alert-overlay" style="display: none;">
+    <div class="custom-alert">
+        <div class="custom-alert-message" id="custom-alert-message"></div>
+        <button class="custom-alert-button" onclick="hideCustomAlert()">确认</button>
+    </div>
+</div>
+
 <script src="/static/js/login.js"></script>
+<script src="/static/js/custom_alert.js"></script> <!-- 引入自定义提示框的 JavaScript -->
 </body>
 </html>

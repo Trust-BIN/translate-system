@@ -53,13 +53,13 @@ async function handleDeleteAccount(event) {
         const data = await response.json();
 
         if (data.success) {
-            alert('账号已成功注销');
+            showCustomAlert('账号已成功注销');
             window.location.href = '/login';
         } else {
-            alert('注销失败: ' + (data.error || '未知错误'));
+            showCustomAlert('注销失败: ' + (data.error || '未知错误'));
         }
     } catch (error) {
-        alert('请求出错，请稍后再试');
+        showCustomAlert('请求出错，请稍后再试');
         console.error(error);
     }
 }

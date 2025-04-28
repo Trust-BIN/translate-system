@@ -36,7 +36,7 @@ async function fetchAllRoles() {
         })
         .catch(error => {
             console.error('获取角色信息时出错:', error);
-            alert('获取角色信息失败，请稍后重试');
+            showCustomAlert('获取角色信息失败，请稍后重试');
         });
 }
 
@@ -76,7 +76,7 @@ async function fetchUserPermissions() {
         })
         .catch(error => {
             console.error('获取用户权限时出错:', error);
-            alert('获取用户权限数据失败，请稍后重试');
+            showCustomAlert('获取用户权限数据失败，请稍后重试');
         });
 }
 
@@ -195,22 +195,39 @@ async function handleEditPermissionSubmit(event) {
         if (response.ok) {
             const data = await response.json();
             if (data.success) {
-                alert('权限修改成功');
+                showCustomAlert('权限修改成功');
                 closeEditModal();
                 // 重新获取用户权限数据并更新表格
                 await fetchUserPermissions();
             } else {
-                alert('修改失败: ' + (data.error || '未知错误'));
+                showCustomAlert('修改失败: ' + (data.error || '未知错误'));
             }
         } else {
             const errorData = await response.json();
-            alert('修改失败: ' + (errorData.error || '未知错误'));
+            showCustomAlert('修改失败: ' + (errorData.error || '未知错误'));
         }
     } catch (error) {
-        alert('请求出错，请稍后再试');
+        showCustomAlert('请求出错，请稍后再试');
         console.error(error);
     }
 }
+
+function goBackToSettings(){
+    window.location.href = '/settings';
+}
+
+// 将用户名显示在页面上
+document.addEventListener('DOMContentLoaded', function () {
+    fetch("/api/current-user")
+        .then(response => response.json())
+        .then(data => {
+            if (data.username) {
+                console.log("当前用户:", data.username);
+                document.getElementById("admin").textContent = data.username;
+            }
+        })
+        .catch(err => console.error("获取用户信息失败:", err));
+});
 
 // 主题切换功能
 function initTheme() {
@@ -231,8 +248,8 @@ function toggleTheme() {
 function updateThemeIcon(theme) {
     const icon = document.querySelector('.theme-switch i');
     if (theme === 'light') {
-        icon.className = 'fas fa-moon';
-    } else {
         icon.className = 'fas fa-sun';
+    } else {
+        icon.className = 'fas fa-moon';
     }
 }

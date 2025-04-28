@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/font-awesome-css/all.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
     <link rel="stylesheet" href="/static/css/translate.css">
+    <link rel="stylesheet" href="/static/css/custom_alert.css"> <!-- 引入自定义提示框的 CSS -->
 </head>
 <body>
 <div class="page-container">
@@ -14,7 +15,10 @@
     <div class="left_nav">
         <!-- 头像-->
         <div class="iocn">
-            <div class="iocn_img"> <span class="iconfont icon-yonghuzhongxin"></span> </div>
+            <div class="iocn_img"> 
+                <span class="iconfont icon-yonghuzhongxin"></span>
+<!--                <img src="../assets/avatar/avatar1.jpg" alt="获取用户头像失败">-->
+            </div>
             <div class="iocn_con">
                 <p>你好！</p>
                 <h2 id="username-display">Username</h2>
@@ -174,6 +178,15 @@
     </div>
 </div>
 
+<!-- 引入自定义提示框的 HTML -->
+<div id="custom-alert-overlay" class="custom-alert-overlay" style="display: none;">
+    <div class="custom-alert">
+        <div class="custom-alert-message" id="custom-alert-message"></div>
+        <button class="custom-alert-button" onclick="hideCustomAlert()">确认</button>
+    </div>
+</div>
+
 <script src="/static/js/translate.js"></script>
+<script src="/static/js/custom_alert.js"></script> <!-- 引入自定义提示框的 JavaScript -->
 </body>
 </html>

@@ -6,6 +6,7 @@
     <title>注销账号 - Translate R1</title>
     <link rel="stylesheet" href="/static/font-awesome-css/all.min.css">
     <link rel="stylesheet" href="/static/css/change_password.css">
+    <link rel="stylesheet" href="/static/css/custom_alert.css"> <!-- 引入自定义提示框的 CSS -->
 </head>
 <body>
 <button class="back-btn" onclick="goBackToSettings()">
@@ -38,6 +39,15 @@
     </main>
 </div>
 
+<!-- 引入自定义提示框的 HTML -->
+<div id="custom-alert-overlay" class="custom-alert-overlay" style="display: none;">
+    <div class="custom-alert">
+        <div class="custom-alert-message" id="custom-alert-message"></div>
+        <button class="custom-alert-button" onclick="hideCustomAlert()">确认</button>
+    </div>
+</div>
+
 <script src="/static/js/delete_account.js"></script>
+<script src="/static/js/custom_alert.js"></script> <!-- 引入自定义提示框的 JavaScript -->
 </body>
 </html>
